@@ -16,6 +16,16 @@ class HomeScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text("StarBus"),
             actions: <Widget>[
+//              IconButton(
+//                icon: Icon(Icons.refresh),
+//                onPressed: () {},
+//                tooltip: "Atualizar",
+//              ),
+              IconButton(
+                icon: Icon(Icons.notifications),
+                onPressed: () {},
+                tooltip: "Notificações",
+              ),
               IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {},
