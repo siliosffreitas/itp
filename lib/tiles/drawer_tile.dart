@@ -22,12 +22,12 @@ class DrawerTile extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 32,
-                  color: Colors.black,
+                  color: _pageController.page == page ? Theme.of(context).primaryColor: Colors.black,
                 ),
               ),
               Text(
                 text,
-                style: TextStyle(fontSize: 16, color: Colors.black),
+                style: TextStyle(fontSize: 16, color: _pageController.page == page ? Theme.of(context).primaryColor: Colors.black,),
               )
             ],
           ),
