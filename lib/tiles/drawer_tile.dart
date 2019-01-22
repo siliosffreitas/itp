@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class DrawerTile extends StatelessWidget {
   final IconData icon;
   final String text;
+  PageController _pageController;
+  final int page;
 
-  DrawerTile(this.icon, this.text);
+  DrawerTile(this.icon, this.text, this._pageController, this.page);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,10 @@ class DrawerTile extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pop();
+          _pageController.jumpToPage(page);
+        },
       ),
     );
   }
