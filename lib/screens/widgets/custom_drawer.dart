@@ -17,7 +17,13 @@ class CustomDrawer extends StatelessWidget {
                 Positioned(
                   top: 8,
                   left: 0,
-                  child: Text("StarBus", style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: Colors.white),),
+                  child: Text(
+                    "StarBus",
+                    style: TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 )
               ],
             ),
