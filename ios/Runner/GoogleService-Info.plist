@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>1097752162095-h3kah5nohgcmfkeiv5qe1gco89fag06h.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1097752162095-h3kah5nohgcmfkeiv5qe1gco89fag06h</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCFkv6wUbdr5YwFH23ncYdSB6U8wKfAp_E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1097752162095</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.siliosffreitas.itp</string>
+	<key>PROJECT_ID</key>
+	<string>info-do-transporte-publico</string>
+	<key>STORAGE_BUCKET</key>
+	<string>info-do-transporte-publico.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1097752162095:ios:9a944e00a315c7b7</string>
+	<key>DATABASE_URL</key>
+	<string>https://info-do-transporte-publico.firebaseio.com</string>
+</dict>
+</plist>
