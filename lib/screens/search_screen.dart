@@ -10,6 +10,7 @@ class SearchScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: (){},
+            tooltip: "Pesquisar",
           )
         ],
       ),
