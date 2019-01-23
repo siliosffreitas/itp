@@ -8,26 +8,44 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('baby').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return Center(child: CircularProgressIndicator(),);
-//        _buildList(context, snapshot.data.documents)
-        print(snapshot.data.documents);
-        snapshot.data.documents.map((doc) {
-          print(doc);
-        });
-        print('teste');
-        return Text("teste");
-      },
-    );
-  }
+    return Column(children: <Widget>[
+      Expanded(
+        flex: 1,
+        child: FutureBuilder(
+          future: FirebaseDatabase.instance.reference().child('linhas').once(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+              case ConnectionState.none:
+                return Container(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    strokeWidth: 5,
+                  ),
+                );
+              default:
+                if (snapshot.hasError)
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                        "Parece que algo deu errado, tente novamente mais tarde"),
+                  );
+//                snapshot.val();
 
-//  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-//    final record = Record.fromSnapshot(data);
-//  }
+                return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(16),
+                  child: Text("Recuperou tudo de boa"),
+                );
+            }
+          },
+        ),
+      )
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
           )
         ],
       ),
-
       body: _buildBody(context),
-
-//     body: FutureBuilder(
-//         builder: null
-//     ),
     );
   }
 }
