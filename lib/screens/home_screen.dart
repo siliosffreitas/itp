@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itp/screens/search_screen.dart';
 import 'package:itp/screens/tabs/map_tab.dart';
 import 'package:itp/screens/tabs/settings_tab.dart';
 import 'package:itp/screens/widgets/custom_drawer.dart';
@@ -23,12 +24,20 @@ class HomeScreen extends StatelessWidget {
 //              ),
               IconButton(
                 icon: Icon(Icons.notifications),
-                onPressed: () {},
+                onPressed: () {
+                  print('teste');
+
+                },
                 tooltip: "Notificações",
               ),
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SearchScreen()),
+                  );
+                },
                 tooltip: "Pesquisar",
               )
             ],
