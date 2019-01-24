@@ -36,6 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
 
                 List list = snapshot.data.value;
+                list.sort((a, b) => a['CodigoLinha'].toString().toLowerCase().compareTo(b['CodigoLinha'].toString().toLowerCase()));
                 return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (BuildContext ctxt, int index) {
