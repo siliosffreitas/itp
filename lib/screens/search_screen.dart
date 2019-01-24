@@ -33,8 +33,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Text(
                         "Parece que algo deu errado, tente novamente mais tarde"),
                   );
-//                snapshot.val();
-//                print(json.decode(snapshot.data));
 
                 List list = snapshot.data.value;
                 print(list);
@@ -46,29 +44,35 @@ class _SearchScreenState extends State<SearchScreen> {
                         onTap: () {},
                         child: Container(
                           padding: EdgeInsets.all(16),
-                          height: 100,
+                          height: 80,
                           child: Row(
                             children: <Widget>[
-                              Column(
-
-                                children: <Widget>[
-                                  Text(list[index]['CodigoLinha'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold ),),
-                                  CircleAvatar(
-                                    child: IconButton(
-                                        icon: Icon(Icons.directions_bus),
-                                        onPressed: () {}),
-                                  ),
-                                ],
+                              CircleAvatar(
+                                child: IconButton(
+                                    icon: Icon(Icons.directions_bus),
+                                    onPressed: () {}),
                               ),
-
-                              Column(
-
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(list[index]['Denomicao']??"", style: TextStyle(fontSize: 18),),
-                                  Text(list[index]['Retorno']?? "", style: TextStyle(fontSize: 16),)
-                                ],
+                              Container(
+                                padding: EdgeInsets.only(left: 16),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      list[index]['CodigoLinha'],
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      list[index]['Denomicao'] ??
+                                          "Não informado",
+                                      style: TextStyle(fontSize: 14),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
                               )
                             ],
                           ),
