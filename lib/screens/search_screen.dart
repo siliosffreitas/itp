@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:itp/tiles/linha_tile.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -35,58 +36,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
 
                 List list = snapshot.data.value;
-                print(list);
-
                 return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (BuildContext ctxt, int index) {
-                      return InkWell(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          height: 80,
-                          child: Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                child: IconButton(
-                                    icon: Icon(Icons.directions_bus),
-                                    onPressed: () {}),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 16),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      list[index]['CodigoLinha'],
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      list[index]['Denomicao'] ??
-                                          "Não informado",
-                                      style: TextStyle(fontSize: 14),
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-
-                      Text(list[index]['Denomicao']);
+                      return LinhaTile(list[index]);
                     });
-
-//                return Container(
-//                  alignment: Alignment.center,
-//                  padding: EdgeInsets.all(16),
-//                  child: Text("Recuperou tudo de boa"),
-//                );
             }
           },
         ),
