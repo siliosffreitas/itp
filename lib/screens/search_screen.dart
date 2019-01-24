@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -14,7 +13,8 @@ class _SearchScreenState extends State<SearchScreen> {
         flex: 1,
         child: FutureBuilder(
           future: FirebaseDatabase.instance.reference().child('linhas').once(),
-          builder: (context, snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
               case ConnectionState.none:
@@ -34,12 +34,55 @@ class _SearchScreenState extends State<SearchScreen> {
                         "Parece que algo deu errado, tente novamente mais tarde"),
                   );
 //                snapshot.val();
+//                print(json.decode(snapshot.data));
 
-                return Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(16),
-                  child: Text("Recuperou tudo de boa"),
-                );
+                List list = snapshot.data.value;
+                print(list);
+
+                return ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return InkWell(
+                        onTap: () {},
+                        child: Container(
+                          padding: EdgeInsets.all(16),
+                          height: 100,
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+
+                                children: <Widget>[
+                                  Text(list[index]['CodigoLinha'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold ),),
+                                  CircleAvatar(
+                                    child: IconButton(
+                                        icon: Icon(Icons.directions_bus),
+                                        onPressed: () {}),
+                                  ),
+                                ],
+                              ),
+
+                              Column(
+
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(list[index]['Denomicao']??"", style: TextStyle(fontSize: 18),),
+                                  Text(list[index]['Retorno']?? "", style: TextStyle(fontSize: 16),)
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+
+                      Text(list[index]['Denomicao']);
+                    });
+
+//                return Container(
+//                  alignment: Alignment.center,
+//                  padding: EdgeInsets.all(16),
+//                  child: Text("Recuperou tudo de boa"),
+//                );
             }
           },
         ),
