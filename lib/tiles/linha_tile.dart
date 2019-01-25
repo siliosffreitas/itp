@@ -49,10 +49,10 @@ class LinhaTile extends StatelessWidget {
                     ))),
             Row(
               children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  onPressed: () {},
-                ),
+//                IconButton(
+//                  icon: Icon(Icons.favorite_border),
+//                  onPressed: () {},
+//                ),
                 IconButton(
                   icon: Icon(Icons.access_time),
                   onPressed: () {
