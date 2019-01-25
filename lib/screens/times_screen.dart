@@ -64,8 +64,35 @@ class _TimesScreenState extends State<TimesScreen> {
                           "Essa linha não possui nenhum horário registrado"),
                     ));
               }
+
+              int count = 0;
+
+              var tabs = List<Widget>();
+              var children = List<Widget>();
+              if (_checkHasPeriod(snapshot, 'week')) {
+                count++;
+                tabs.add(Tab(
+                  text: "SEMANA",
+                ));
+                children.add(_gridTab(snapshot, 'week'));
+              }
+              if (_checkHasPeriod(snapshot, 'saturday')) {
+                count++;
+                tabs.add(Tab(
+                  text: "SÁBADO",
+                ));
+                children.add(_gridTab(snapshot, 'saturday'));
+              }
+              if (_checkHasPeriod(snapshot, 'sunday')) {
+                count++;
+                tabs.add(Tab(
+                  text: "DOMINGO",
+                ));
+                children.add(_gridTab(snapshot, 'sunday'));
+              }
+
               return DefaultTabController(
-                length: 3,
+                length: count,
                 child: Scaffold(
                   appBar: AppBar(
                     title: Column(
@@ -83,17 +110,7 @@ class _TimesScreenState extends State<TimesScreen> {
                       ],
                     ),
                     bottom: TabBar(
-                      tabs: [
-                        Tab(
-                          text: "SEMANA",
-                        ),
-                        Tab(
-                          text: "SÁBADO",
-                        ),
-                        Tab(
-                          text: "DOMINGO",
-                        ),
-                      ],
+                      tabs: tabs,
                     ),
                     actions: <Widget>[
                       IconButton(
@@ -106,16 +123,16 @@ class _TimesScreenState extends State<TimesScreen> {
                     ],
                   ),
                   body: TabBarView(
-                    children: [
-                      _gridTab(snapshot, 'week'),
-                      _gridTab(snapshot, 'saturday'),
-                      _gridTab(snapshot, 'sunday'),
-                    ],
+                    children: children,
                   ),
                 ),
               );
           }
         });
+  }
+
+  _checkHasPeriod(AsyncSnapshot<DataSnapshot> snapshot, String period) {
+    return snapshot.data.value['times'][period] != null;
   }
 
   _getDetailsTimes() {
@@ -156,7 +173,7 @@ class _TimesScreenState extends State<TimesScreen> {
     );
   }
 
-  Widget _gridTab(snapshot, period) {
+  Widget _gridTab(AsyncSnapshot<DataSnapshot> snapshot, String period) {
     return GridView.builder(
         padding: EdgeInsets.all(4.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
