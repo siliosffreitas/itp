@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:io' show Platform;
 
 class TimesScreen extends StatefulWidget {
   final dynamic _line;
@@ -63,29 +64,15 @@ class _TimesScreenState extends State<TimesScreen> {
                           "Essa linha não possui nenhum horário registrado"),
                     ));
               }
-
-              print(snapshot.data.value);
-
-//                List list = snapshot.data.value;
-//                list.sort((a, b) => a['CodigoLinha']
-//                    .toString()
-//                    .toLowerCase()
-//                    .compareTo(b['CodigoLinha'].toString().toLowerCase()));
-//                return ListView.builder(
-//                    itemCount: list.length,
-//                    itemBuilder: (BuildContext ctxt, int index) {
-//                      return LinhaTile(list[index]);
-//                    });
-
-//                return Text(snapshot.data.value['startPoint']);
-
               return DefaultTabController(
                 length: 3,
                 child: Scaffold(
                   appBar: AppBar(
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: Platform.isAndroid
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
                       children: <Widget>[
                         Text("Horários de ${_line['CodigoLinha']}",
                             style: TextStyle(fontSize: 22)),
@@ -108,14 +95,21 @@ class _TimesScreenState extends State<TimesScreen> {
                         ),
                       ],
                     ),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.help_outline),
+                        onPressed: () {
+                          _getDetailsTimes();
+                        },
+                        tooltip: "Ajuda",
+                      ),
+                    ],
                   ),
                   body: TabBarView(
                     children: [
                       _gridTab(snapshot, 'week'),
                       _gridTab(snapshot, 'saturday'),
                       _gridTab(snapshot, 'sunday'),
-
-
                     ],
                   ),
                 ),
@@ -124,20 +118,55 @@ class _TimesScreenState extends State<TimesScreen> {
         });
   }
 
+  _getDetailsTimes() {
+    FirebaseDatabase.instance
+        .reference()
+        .child('horarios')
+        .child('informacoes')
+        .once()
+        .then((DataSnapshot snapshot) {
+      print(snapshot.value);
+      _showDialog(context, snapshot.value['titulo'],
+          "${snapshot.value['legenda']}\n\nÚltima atualização em ${snapshot.value['ultimaAtualizacao']}");
+    });
+  }
+
+  void _showDialog(context, title, content) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(title),
+          content: SingleChildScrollView(
+            child: new Text(content),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Fechar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _gridTab(snapshot, period) {
     return GridView.builder(
         padding: EdgeInsets.all(4.0),
-        gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 4.0,
           crossAxisSpacing: 4.0,
           childAspectRatio: 3,
         ),
-        itemCount: snapshot.data.value['times'][period]
-            .toString()
-            .split(",")
-            .length,
+        itemCount:
+            snapshot.data.value['times'][period].toString().split(",").length,
         itemBuilder: (context, index) {
           return Container(
             padding: EdgeInsets.only(left: 16),
@@ -146,11 +175,14 @@ class _TimesScreenState extends State<TimesScreen> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.access_time),
-                  onPressed: (){},
+                  onPressed: () {},
                 ),
-                Text(snapshot.data.value['times']['week']
-                    .toString()
-                    .split(",")[index], style: TextStyle(fontSize: 22),)
+                Text(
+                  snapshot.data.value['times']['week']
+                      .toString()
+                      .split(",")[index],
+                  style: TextStyle(fontSize: 22),
+                )
               ],
             ),
           );
