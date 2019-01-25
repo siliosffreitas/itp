@@ -17,46 +17,54 @@ class _TimesScreenState extends State<TimesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Horários de ${_line['CodigoLinha']}"),
-      ),
-      body: FutureBuilder(
-          future: FirebaseDatabase.instance
-              .reference()
-              .child('horarios')
-              .child(_line['CodigoLinha'])
-              .once(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-              case ConnectionState.none:
-                return Container(
+    return FutureBuilder(
+        future: FirebaseDatabase.instance
+            .reference()
+            .child('horarios')
+            .child(_line['CodigoLinha'])
+            .once(),
+        builder: (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text("Horários de ${_line['CodigoLinha']}"),
+                ),
+                body: Container(
                   alignment: Alignment.center,
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                     strokeWidth: 5,
                   ),
-                );
-              default:
-                if (snapshot.hasError)
-                  return Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                        "Parece que algo deu errado, tente novamente mais tarde"),
-                  );
+                ),
+              );
+            default:
+              if (snapshot.hasError)
+                return Scaffold(
+                    appBar: AppBar(
+                      title: Text("Horários de ${_line['CodigoLinha']}"),
+                    ),
+                    body: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                          "Parece que algo deu errado, tente novamente mais tarde"),
+                    ));
 
-                if (snapshot.data.value == null) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child:
-                        Text("Essa linha não possui nenhum horário registrado"),
-                  );
-                }
+              if (snapshot.data.value == null) {
+                return Scaffold(
+                    appBar: AppBar(
+                      title: Text("Horários de ${_line['CodigoLinha']}"),
+                    ),
+                    body: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                          "Essa linha não possui nenhum horário registrado"),
+                    ));
+              }
 
-                print(snapshot.data.value);
+              print(snapshot.data.value);
 
 //                List list = snapshot.data.value;
 //                list.sort((a, b) => a['CodigoLinha']
@@ -71,17 +79,75 @@ class _TimesScreenState extends State<TimesScreen> {
 
 //                return Text(snapshot.data.value['startPoint']);
 
-                return DefaultTabController(
-                  length: 3,
-                  child: TabBarView(
-                      children: [
-                        Container(color: Colors.red,),
-                        Container(color: Colors.green,),
-                        Container(color: Colors.blue,),
-                      ])
-                );
-            }
-          }),
-    );
+              return DefaultTabController(
+                length: 3,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Horários de ${_line['CodigoLinha']}",
+                            style: TextStyle(fontSize: 22)),
+                        Text(
+                          "Ponto inicial: ${snapshot.data.value['startPoint']}",
+                          style: TextStyle(fontSize: 12),
+                        )
+                      ],
+                    ),
+                    bottom: TabBar(
+                      tabs: [
+                        Tab(
+                          text: "SEMANA",
+                        ),
+                        Tab(
+                          text: "SÁBADO",
+                        ),
+                        Tab(
+                          text: "DOMINGO",
+                        ),
+                      ],
+                    ),
+                  ),
+                  body: TabBarView(
+                    children: [
+                      GridView.builder(
+                          padding: EdgeInsets.all(4.0),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 4.0,
+                            crossAxisSpacing: 4.0,
+                            childAspectRatio: 3,
+                          ),
+                          itemCount: snapshot.data.value['times']['week']
+                              .toString()
+                              .split(",")
+                              .length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.only(left: 16),
+                              height: 80,
+                              child: Row(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.access_time),
+                                    onPressed: (){},
+                                  ),
+                                  Text(snapshot.data.value['times']['week']
+                                      .toString()
+                                      .split(",")[index], style: TextStyle(fontSize: 22),)
+                                ],
+                              ),
+                            );
+                          }),
+                      Icon(Icons.directions_transit),
+                      Icon(Icons.directions_bike),
+                    ],
+                  ),
+                ),
+              );
+          }
+        });
   }
 }
