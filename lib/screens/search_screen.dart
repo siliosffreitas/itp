@@ -53,14 +53,14 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Buscar no StarBus"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-            tooltip: "Pesquisar",
-          )
-        ],
+        title: Text("Linhas"),
+//        actions: <Widget>[
+//          IconButton(
+//            icon: Icon(Icons.search),
+//            onPressed: () {},
+//            tooltip: "Pesquisar",
+//          )
+//        ],
       ),
       body: _buildBody(context),
     );
