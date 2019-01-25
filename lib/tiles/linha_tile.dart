@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itp/screens/times_screen.dart';
 
 class LinhaTile extends StatelessWidget {
   final dynamic _linha;
@@ -54,7 +55,12 @@ class LinhaTile extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.access_time),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimesScreen(_linha)),
+                    );
+                  },
                 )
               ],
             )
