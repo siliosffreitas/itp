@@ -34,11 +34,14 @@ class LinhaTile extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              _linha['Denomicao'] ?? "Não informado",
-                              style: TextStyle(fontSize: 14),
-                              maxLines: 2,
-                            ),
+                            Container(
+                              width: 200,
+                              child: Text(
+                                _linha['Denomicao'] ?? "Não informado",
+                                style: TextStyle(fontSize: 14),
+                                softWrap: true,
+                              ),
+                            )
                           ],
                         ),
                       ],
