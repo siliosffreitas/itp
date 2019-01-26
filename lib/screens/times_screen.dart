@@ -142,7 +142,6 @@ class _TimesScreenState extends State<TimesScreen> {
         .child('informacoes')
         .once()
         .then((DataSnapshot snapshot) {
-      print(snapshot.value);
       _showDialog(context, snapshot.value['titulo'],
           "${snapshot.value['legenda']}\n\nÚltima atualização em ${snapshot.value['ultimaAtualizacao']}");
     });
