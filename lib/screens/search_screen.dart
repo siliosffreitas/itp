@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:itp/tiles/linha_tile.dart';
+import 'package:itp/screens/times_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -36,12 +36,38 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
 
                 List list = snapshot.data.value;
-                list.sort((a, b) => a['CodigoLinha'].toString().toLowerCase().compareTo(b['CodigoLinha'].toString().toLowerCase()));
+                list.sort((a, b) => a['CodigoLinha']
+                    .toString()
+                    .toLowerCase()
+                    .compareTo(b['CodigoLinha'].toString().toLowerCase()));
 
                 return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (BuildContext ctxt, int index) {
-                      return LinhaTile(list[index]);
+                      return ListTile(
+                        leading: Icon(Icons.directions_bus),
+                        title: Text(
+                          list[index]['CodigoLinha'],
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        subtitle: Text(
+                          list[index]['Denomicao'] ?? "Não informado",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        trailing: IconButton(
+                          tooltip: "Horários de ${list[index]['CodigoLinha']}",
+                          icon: Icon(Icons.access_time),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      TimesScreen(list[index])),
+                            );
+                          },
+                        ),
+                        onTap: () {},
+                      );
                     });
             }
           },
