@@ -51,7 +51,7 @@ class _MapTabState extends State<MapTab> {
 //        compassEnabled: false,
 //      trackCameraPosition: false,
 //      tiltGesturesEnabled: false,
-        initialCameraPosition: CameraPosition(`
+        initialCameraPosition: CameraPosition(
           target: LatLng(-5.082618, -42.790596),
           zoom: 11,
         ),
