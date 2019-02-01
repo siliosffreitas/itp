@@ -184,23 +184,11 @@ class _TimesScreenState extends State<TimesScreen> {
         itemCount:
             snapshot.data.value['times'][period].toString().split(",").length,
         itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.only(left: 16),
-            height: 80,
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.access_time),
-                  onPressed: () {},
-                ),
-                Text(
-                  snapshot.data.value['times']['week']
-                      .toString()
-                      .split(",")[index],
-                  style: TextStyle(fontSize: 22),
-                )
-              ],
-            ),
+          return ListTile(
+            leading: Icon(Icons.access_time),
+            title: Text(snapshot.data.value['times']['week']
+                .toString()
+                .split(",")[index]),
           );
         });
   }
