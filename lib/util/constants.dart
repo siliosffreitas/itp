@@ -1,0 +1,1 @@
+final DISTANCE_SEARCH_SOPTS = 500;

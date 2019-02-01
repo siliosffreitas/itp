@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as LocationManager;
 import 'package:firebase_database/firebase_database.dart';
 
+
 class MapTab extends StatefulWidget {
   @override
   _MapTabState createState() => _MapTabState();
@@ -27,6 +28,7 @@ class _MapTabState extends State<MapTab> {
   }
 
   _getStops(LatLng userLocation) {
+    userLocation.
     if (userLocation == null) {
       _showDialog("Erro", "Algum problema ao tentar capturar sua posição");
     } else {
@@ -35,7 +37,10 @@ class _MapTabState extends State<MapTab> {
           .child('paradas')
           .once()
           .then((DataSnapshot snapshot) {
-            print(snapshot.value);
+        for (var stop in snapshot.value) {
+
+//          print(stop);
+        }
       });
     }
   }
