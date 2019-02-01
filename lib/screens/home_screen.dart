@@ -33,8 +33,9 @@ class HomeScreen extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
+                onPressed: () async{
+                  String line = await showSearch(context: context, delegate: DataSearch());
+                  print(line);
 //                  Navigator.push(
 //                    context,
 //                    MaterialPageRoute(builder: (context) => SearchScreen()),

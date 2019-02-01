@@ -99,7 +99,9 @@ class DataSearch extends SearchDelegate<String> {
                 );
               },
             ),
-            onTap: () {},
+            onTap: () {
+              close(context, list[index]['CodigoLinha']);
+            },
           );
         });
   }
