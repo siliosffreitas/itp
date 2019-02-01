@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:itp/screens/stop_screen.dart';
 import 'package:itp/util/constants.dart';
 import 'package:itp/util/util.dart';
 import 'package:location/location.dart' as LocationManager;
@@ -74,11 +75,7 @@ class _MapTabState extends State<MapTab> {
         ),
         icon: BitmapDescriptor.fromAsset("assets/stopbus_green.png"),
       ),
-    ).then((marker){
-      mapController.onInfoWindowTapped.add((Marker marker){
-        print(marker.id);
-      });
-    });
+    );
 
   }
 
@@ -148,8 +145,11 @@ class _MapTabState extends State<MapTab> {
       mapController = controller;
     });
 
-
-
+    mapController.onInfoWindowTapped.add((Marker marker){
+      var index = marker.options.zIndex.toInt() - 1;
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => StopScreen()));
+    });
 
     _refresh();
   }
