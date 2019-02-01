@@ -12,7 +12,7 @@ class MapTab extends StatefulWidget {
 
 class _MapTabState extends State<MapTab> {
   GoogleMapController mapController;
-  List nextsStopos;
+  List nextsStops;
 
   void _refresh() async {
     final center = await _getUserLocation();
@@ -48,11 +48,12 @@ class _MapTabState extends State<MapTab> {
                     double.tryParse(stop['Long'])) <=
                 DISTANCE_SEARCH_SOPTS) {
               print(stop);
-              if (nextsStopos == null) {
-                nextsStopos = new List();
+              if (nextsStops == null) {
+                nextsStops = new List();
               }
-              nextsStopos.add(stop);
+              nextsStops.add(stop);
               _onAddMarkerButtonPressed(stop);
+              
             }
           }
         }
@@ -67,12 +68,14 @@ class _MapTabState extends State<MapTab> {
           double.tryParse(stop['Lat'].toString()),
           double.tryParse(stop['Long'].toString()),
         ),
-        infoWindowText: InfoWindowText('Parada ${stop['CodigoParada']} • ${stop['Denomicao']}', stop['Endereco']),
-        icon: BitmapDescriptor.defaultMarker,
+        infoWindowText: InfoWindowText(
+          'Parada ${stop['CodigoParada']} • ${stop['Denomicao']}',
+          stop['Endereco'],
+        ),
+        icon: BitmapDescriptor.fromAsset("assets/stopbus_green.png"),
       ),
     );
   }
-
 
   void _showDialog(title, content) {
     // flutter defined function
@@ -138,6 +141,8 @@ class _MapTabState extends State<MapTab> {
     setState(() {
       mapController = controller;
     });
+    
+    mapController.onInfoWindowTapped(Marker(_id, _options))
 
     _refresh();
   }
