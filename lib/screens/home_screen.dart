@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itp/delegates/data_search.dart';
 import 'package:itp/screens/search_screen.dart';
 import 'package:itp/screens/tabs/map_tab.dart';
 import 'package:itp/screens/tabs/settings_tab.dart';
@@ -33,10 +34,11 @@ class HomeScreen extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SearchScreen()),
-                  );
+                  showSearch(context: context, delegate: DataSearch());
+//                  Navigator.push(
+//                    context,
+//                    MaterialPageRoute(builder: (context) => SearchScreen()),
+//                  );
                 },
                 tooltip: "Pesquisar",
               )
