@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:itp/screens/times_screen.dart';
+import 'dart:convert';
+
+import 'package:itp/util/util.dart';
 
 class DataSearch extends SearchDelegate<String> {
   List _list;
@@ -107,11 +110,15 @@ class DataSearch extends SearchDelegate<String> {
   }
 
   _suggestions(BuildContext context, String search) {
-    search = search.toLowerCase().trim();
+    search = Util.removeDiacritics(search.toLowerCase().trim());
     List auxList = _list
         .where((line) =>
-            line['CodigoLinha'].toString().toLowerCase().contains(search) ||
-            line['Denomicao'].toString().toLowerCase().contains(search))
+            Util.removeDiacritics(line['CodigoLinha'].toString())
+                .toLowerCase()
+                .contains(search) ||
+            Util.removeDiacritics(line['Denomicao'].toString())
+                .toLowerCase()
+                .contains(search))
         .toList();
     return _returnListResults(context, auxList);
   }

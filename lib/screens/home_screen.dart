@@ -23,14 +23,14 @@ class HomeScreen extends StatelessWidget {
 //                onPressed: () {},
 //                tooltip: "Atualizar",
 //              ),
-              IconButton(
-                icon: Icon(Icons.notifications),
-                onPressed: () {
-                  print('teste');
-
-                },
-                tooltip: "Notificações",
-              ),
+//              IconButton(
+//                icon: Icon(Icons.notifications),
+//                onPressed: () {
+//                  print('teste');
+//
+//                },
+//                tooltip: "Notificações",
+//              ),
               IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () async{
