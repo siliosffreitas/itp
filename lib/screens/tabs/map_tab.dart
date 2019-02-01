@@ -74,7 +74,12 @@ class _MapTabState extends State<MapTab> {
         ),
         icon: BitmapDescriptor.fromAsset("assets/stopbus_green.png"),
       ),
-    );
+    ).then((marker){
+      mapController.onInfoWindowTapped.add((Marker marker){
+        print(marker.id);
+      });
+    });
+
   }
 
   void _showDialog(title, content) {
@@ -124,6 +129,7 @@ class _MapTabState extends State<MapTab> {
   Widget build(BuildContext context) {
     return Container(
       child: GoogleMap(
+
         onMapCreated: _onMapCreated,
         myLocationEnabled: true,
 //        compassEnabled: false,
@@ -141,8 +147,9 @@ class _MapTabState extends State<MapTab> {
     setState(() {
       mapController = controller;
     });
-    
-    mapController.onInfoWindowTapped(Marker(_id, _options))
+
+
+
 
     _refresh();
   }
