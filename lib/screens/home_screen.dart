@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:itp/delegates/data_search.dart';
-import 'package:itp/screens/search_screen.dart';
 import 'package:itp/screens/tabs/map_tab.dart';
 import 'package:itp/screens/tabs/settings_tab.dart';
 import 'package:itp/screens/widgets/custom_drawer.dart';
@@ -36,10 +35,6 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () async{
                   String line = await showSearch(context: context, delegate: DataSearch());
                   print(line);
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(builder: (context) => SearchScreen()),
-//                  );
                 },
                 tooltip: "Pesquisar",
               )
@@ -56,7 +51,6 @@ class HomeScreen extends StatelessWidget {
           body: SettingsTab(),
         ),
 
-//        ,
       ],
     );
   }

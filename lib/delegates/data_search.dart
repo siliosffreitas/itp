@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:itp/screens/times_screen.dart';
-import 'dart:convert';
-
 import 'package:itp/util/util.dart';
 
 class DataSearch extends SearchDelegate<String> {
