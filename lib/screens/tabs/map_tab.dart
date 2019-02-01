@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:itp/util/constants.dart';
+import 'package:itp/util/util.dart';
 import 'package:location/location.dart' as LocationManager;
 import 'package:firebase_database/firebase_database.dart';
-
 
 class MapTab extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class MapTab extends StatefulWidget {
 
 class _MapTabState extends State<MapTab> {
   GoogleMapController mapController;
+  List nextsStopos;
 
   void _refresh() async {
     final center = await _getUserLocation();
@@ -28,7 +30,7 @@ class _MapTabState extends State<MapTab> {
   }
 
   _getStops(LatLng userLocation) {
-    userLocation.
+//    userLocation.
     if (userLocation == null) {
       _showDialog("Erro", "Algum problema ao tentar capturar sua posição");
     } else {
@@ -38,12 +40,39 @@ class _MapTabState extends State<MapTab> {
           .once()
           .then((DataSnapshot snapshot) {
         for (var stop in snapshot.value) {
-
-//          print(stop);
+          if (stop['Lat'] != null && stop['Long'] != null) {
+            if (Util.getDistanceBetween(
+                    userLocation.latitude,
+                    userLocation.longitude,
+                    double.tryParse(stop['Lat'].toString()),
+                    double.tryParse(stop['Long'])) <=
+                DISTANCE_SEARCH_SOPTS) {
+              print(stop);
+              if (nextsStopos == null) {
+                nextsStopos = new List();
+              }
+              nextsStopos.add(stop);
+              _onAddMarkerButtonPressed(stop);
+            }
+          }
         }
       });
     }
   }
+
+  void _onAddMarkerButtonPressed(stop) {
+    mapController.addMarker(
+      MarkerOptions(
+        position: LatLng(
+          double.tryParse(stop['Lat'].toString()),
+          double.tryParse(stop['Long'].toString()),
+        ),
+        infoWindowText: InfoWindowText('Parada ${stop['CodigoParada']} • ${stop['Denomicao']}', stop['Endereco']),
+        icon: BitmapDescriptor.defaultMarker,
+      ),
+    );
+  }
+
 
   void _showDialog(title, content) {
     // flutter defined function
