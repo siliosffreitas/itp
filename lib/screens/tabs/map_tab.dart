@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:itp/models/stop.dart';
 import 'package:itp/screens/stop_screen.dart';
 import 'package:itp/util/constants.dart';
 import 'package:itp/util/util.dart';
@@ -13,7 +14,7 @@ class MapTab extends StatefulWidget {
 
 class _MapTabState extends State<MapTab> {
   GoogleMapController mapController;
-  List nextsStops;
+  List<Stop> nextsStops;
 
   void _refresh() async {
     final center = await _getUserLocation();
@@ -48,8 +49,9 @@ class _MapTabState extends State<MapTab> {
               if (nextsStops == null) {
                 nextsStops = new List();
               }
-              nextsStops.add(stop);
-              _onAddMarkerButtonPressed(stop);
+              Stop s = Stop.fromMap(stop);
+              nextsStops.add(s);
+              _addStopOnMap(s);
             }
           }
         }
@@ -57,16 +59,13 @@ class _MapTabState extends State<MapTab> {
     }
   }
 
-  void _onAddMarkerButtonPressed(stop) {
+  void _addStopOnMap(Stop stop) {
     mapController.addMarker(
       MarkerOptions(
-        position: LatLng(
-          double.tryParse(stop['Lat'].toString()),
-          double.tryParse(stop['Long'].toString()),
-        ),
+        position: LatLng(stop.latitude, stop.longititude),
         infoWindowText: InfoWindowText(
-          'Parada ${stop['CodigoParada']} • ${stop['Denomicao']}',
-          stop['Endereco'],
+          'Parada ${stop.code} • ${stop.nickname}',
+          stop.address,
         ),
         icon: Theme.of(context).platform == TargetPlatform.iOS
             ? BitmapDescriptor.fromAsset("assets/ios/stopbus_green.png")
@@ -121,9 +120,6 @@ class _MapTabState extends State<MapTab> {
       child: GoogleMap(
         onMapCreated: _onMapCreated,
         myLocationEnabled: true,
-//        compassEnabled: false,
-//      trackCameraPosition: false,
-//      tiltGesturesEnabled: false,
         initialCameraPosition: CameraPosition(
           target: LatLng(-5.082618, -42.790596),
           zoom: 11,
