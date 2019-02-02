@@ -54,7 +54,6 @@ class _MapTabState extends State<MapTab> {
               }
               nextsStops.add(stop);
               _onAddMarkerButtonPressed(stop);
-              
             }
           }
         }
@@ -73,10 +72,11 @@ class _MapTabState extends State<MapTab> {
           'Parada ${stop['CodigoParada']} • ${stop['Denomicao']}',
           stop['Endereco'],
         ),
-        icon: BitmapDescriptor.fromAsset("assets/stopbus_green.png"),
+        icon: Theme.of(context).platform == TargetPlatform.iOS
+            ? BitmapDescriptor.fromAsset("assets/ios/stopbus_green.png")
+            : BitmapDescriptor.fromAsset("assets/android/stopbus_green.png"),
       ),
     );
-
   }
 
   void _showDialog(title, content) {
@@ -126,7 +126,6 @@ class _MapTabState extends State<MapTab> {
   Widget build(BuildContext context) {
     return Container(
       child: GoogleMap(
-
         onMapCreated: _onMapCreated,
         myLocationEnabled: true,
 //        compassEnabled: false,
@@ -145,10 +144,10 @@ class _MapTabState extends State<MapTab> {
       mapController = controller;
     });
 
-    mapController.onInfoWindowTapped.add((Marker marker){
+    mapController.onInfoWindowTapped.add((Marker marker) {
       var index = marker.options.zIndex.toInt() - 1;
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => StopScreen()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) => StopScreen()));
     });
 
     _refresh();
