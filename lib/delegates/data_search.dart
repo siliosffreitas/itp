@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:itp/models/line.dart';
 import 'package:itp/screens/times_screen.dart';
 import 'package:itp/util/util.dart';
 
 class DataSearch extends SearchDelegate<String> {
-  List _list;
+  List<Line> _list;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -60,12 +61,13 @@ class DataSearch extends SearchDelegate<String> {
                       "Parece que algo deu errado, tente novamente mais tarde"),
                 );
 
-              _list = snapshot.data.value;
-              _list.sort((a, b) => a['CodigoLinha']
-                  .toString()
-                  .toLowerCase()
-                  .compareTo(b['CodigoLinha'].toString().toLowerCase()));
-
+              _list = List<Line>();
+              for (var json in snapshot.data.value) {
+                Line line = Line.fromMap(json);
+                _list.add(line);
+              }
+              _list.sort((a, b) =>
+                  a.code.toLowerCase().compareTo(b.code.toLowerCase()));
               return _returnListResults(context, _list);
           }
         },
@@ -75,22 +77,22 @@ class DataSearch extends SearchDelegate<String> {
     }
   }
 
-  ListView _returnListResults(BuildContext context, list) {
+  ListView _returnListResults(BuildContext context, List<Line> list) {
     return ListView.builder(
         itemCount: list.length,
         itemBuilder: (BuildContext ctxt, int index) {
           return ListTile(
             leading: Icon(Icons.directions_bus),
             title: Text(
-              list[index]['CodigoLinha'],
+              list[index].code,
               style: TextStyle(fontSize: 20),
             ),
             subtitle: Text(
-              list[index]['Denomicao'] ?? "Não informado",
+              list[index].nickname ?? "Não informado",
               style: TextStyle(fontSize: 12),
             ),
             trailing: IconButton(
-              tooltip: "Horários de ${list[index]['CodigoLinha']}",
+              tooltip: "Horários de ${list[index].code}",
               icon: Icon(Icons.access_time),
               onPressed: () {
                 Navigator.push(
@@ -101,7 +103,7 @@ class DataSearch extends SearchDelegate<String> {
               },
             ),
             onTap: () {
-              close(context, list[index]['CodigoLinha']);
+              close(context, list[index].code);
             },
           );
         });
@@ -109,12 +111,12 @@ class DataSearch extends SearchDelegate<String> {
 
   _suggestions(BuildContext context, String search) {
     search = Util.removeDiacritics(search.toLowerCase().trim());
-    List auxList = _list
+    List<Line> auxList = _list
         .where((line) =>
-            Util.removeDiacritics(line['CodigoLinha'].toString())
+            Util.removeDiacritics(line.code.toString())
                 .toLowerCase()
                 .contains(search) ||
-            Util.removeDiacritics(line['Denomicao'].toString())
+            Util.removeDiacritics(line.nickname.toString())
                 .toLowerCase()
                 .contains(search))
         .toList();

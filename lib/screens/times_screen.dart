@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:io' show Platform;
 
+import 'package:itp/models/line.dart';
+
 class TimesScreen extends StatefulWidget {
-  final dynamic _line;
+  final Line _line;
 
   TimesScreen(this._line);
 
@@ -12,7 +14,7 @@ class TimesScreen extends StatefulWidget {
 }
 
 class _TimesScreenState extends State<TimesScreen> {
-  final dynamic _line;
+  final Line _line;
 
   _TimesScreenState(this._line);
 
@@ -22,7 +24,7 @@ class _TimesScreenState extends State<TimesScreen> {
         future: FirebaseDatabase.instance
             .reference()
             .child('horarios')
-            .child(_line['CodigoLinha'])
+            .child(_line.code)
             .once(),
         builder: (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
           switch (snapshot.connectionState) {
@@ -30,7 +32,7 @@ class _TimesScreenState extends State<TimesScreen> {
             case ConnectionState.none:
               return Scaffold(
                 appBar: AppBar(
-                  title: Text("Horários de ${_line['CodigoLinha']}"),
+                  title: Text("Horários de ${_line.code}"),
                 ),
                 body: Container(
                   alignment: Alignment.center,
@@ -44,7 +46,7 @@ class _TimesScreenState extends State<TimesScreen> {
               if (snapshot.hasError)
                 return Scaffold(
                     appBar: AppBar(
-                      title: Text("Horários de ${_line['CodigoLinha']}"),
+                      title: Text("Horários de ${_line.code}"),
                     ),
                     body: Container(
                       alignment: Alignment.center,
@@ -56,7 +58,7 @@ class _TimesScreenState extends State<TimesScreen> {
               if (snapshot.data.value == null) {
                 return Scaffold(
                     appBar: AppBar(
-                      title: Text("Horários de ${_line['CodigoLinha']}"),
+                      title: Text("Horários de ${_line.code}"),
                     ),
                     body: Container(
                       alignment: Alignment.center,
@@ -101,7 +103,7 @@ class _TimesScreenState extends State<TimesScreen> {
                           ? CrossAxisAlignment.start
                           : CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("Horários de ${_line['CodigoLinha']}",
+                        Text("Horários de ${_line.code}",
                             style: TextStyle(fontSize: 22)),
                         Text(
                           "Ponto inicial: ${snapshot.data.value['startPoint']}",
