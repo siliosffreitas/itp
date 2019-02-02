@@ -13,13 +13,13 @@ class MapTab extends StatefulWidget {
 }
 
 class _MapTabState extends State<MapTab> {
-  GoogleMapController mapController;
-  List<Stop> nextsStops;
+  GoogleMapController _mapController;
+  List<Stop> _nextsStops;
 
   void _refresh() async {
     final center = await _getUserLocation();
 
-    mapController.moveCamera(CameraUpdate.newCameraPosition(
+    _mapController.moveCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         target: center == null ? LatLng(0, 0) : center,
         zoom: 15.0,
@@ -46,11 +46,11 @@ class _MapTabState extends State<MapTab> {
                     double.tryParse(stop['Lat'].toString()),
                     double.tryParse(stop['Long'])) <=
                 DISTANCE_SEARCH_SOPTS) {
-              if (nextsStops == null) {
-                nextsStops = new List();
+              if (_nextsStops == null) {
+                _nextsStops = new List();
               }
               Stop s = Stop.fromMap(stop);
-              nextsStops.add(s);
+              _nextsStops.add(s);
               _addStopOnMap(s);
             }
           }
@@ -60,7 +60,7 @@ class _MapTabState extends State<MapTab> {
   }
 
   void _addStopOnMap(Stop stop) {
-    mapController.addMarker(
+    _mapController.addMarker(
       MarkerOptions(
         position: LatLng(stop.latitude, stop.longititude),
         infoWindowText: InfoWindowText(
@@ -130,10 +130,10 @@ class _MapTabState extends State<MapTab> {
 
   void _onMapCreated(GoogleMapController controller) async {
     setState(() {
-      mapController = controller;
+      _mapController = controller;
     });
 
-    mapController.onInfoWindowTapped.add((Marker marker) {
+    _mapController.onInfoWindowTapped.add((Marker marker) {
       var index = marker.options.zIndex.toInt() - 1;
       Navigator.of(context).push(
           MaterialPageRoute(builder: (BuildContext context) => StopScreen()));
