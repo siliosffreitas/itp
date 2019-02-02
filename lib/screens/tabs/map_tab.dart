@@ -18,8 +18,6 @@ class _MapTabState extends State<MapTab> {
   void _refresh() async {
     final center = await _getUserLocation();
 
-    print(center);
-
     mapController.moveCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         target: center == null ? LatLng(0, 0) : center,
@@ -31,7 +29,6 @@ class _MapTabState extends State<MapTab> {
   }
 
   _getStops(LatLng userLocation) {
-//    userLocation.
     if (userLocation == null) {
       _showDialog("Erro", "Algum problema ao tentar capturar sua posição");
     } else {
@@ -48,7 +45,6 @@ class _MapTabState extends State<MapTab> {
                     double.tryParse(stop['Lat'].toString()),
                     double.tryParse(stop['Long'])) <=
                 DISTANCE_SEARCH_SOPTS) {
-              print(stop);
               if (nextsStops == null) {
                 nextsStops = new List();
               }
@@ -112,11 +108,8 @@ class _MapTabState extends State<MapTab> {
       final lat = currentLocation["latitude"];
       final lng = currentLocation["longitude"];
       final center = LatLng(lat, lng);
-
-      print("silio");
       return center;
     } on Exception catch (e) {
-      print(e.toString());
       currentLocation = null;
       return null;
     }
