@@ -59,12 +59,16 @@ class _MapTabState extends State<MapTab> {
     }
   }
 
+  String _titleInfowindow(Stop stop) {
+    return 'Parada ${stop.code} • ${stop.nickname}';
+  }
+
   void _addStopOnMap(Stop stop) {
     _mapController.addMarker(
       MarkerOptions(
         position: LatLng(stop.latitude, stop.longititude),
         infoWindowText: InfoWindowText(
-          'Parada ${stop.code} • ${stop.nickname}',
+          _titleInfowindow(stop),
           stop.address,
         ),
         icon: Theme.of(context).platform == TargetPlatform.iOS
@@ -134,9 +138,13 @@ class _MapTabState extends State<MapTab> {
     });
 
     _mapController.onInfoWindowTapped.add((Marker marker) {
-      var index = marker.options.zIndex.toInt() - 1;
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => StopScreen()));
+      for (var stop in _nextsStops) {
+        if (marker.options.infoWindowText.title == _titleInfowindow(stop)) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => StopScreen(stop)));
+          break;
+        }
+      }
     });
 
     _refresh();
