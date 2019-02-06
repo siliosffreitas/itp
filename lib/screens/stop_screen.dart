@@ -73,6 +73,7 @@ class _StopScreenState extends State<StopScreen> {
                   case ConnectionState.waiting:
                   case ConnectionState.none:
                     return Container(
+                      padding: EdgeInsets.all(16),
                       alignment: Alignment.center,
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
@@ -98,31 +99,14 @@ class _StopScreenState extends State<StopScreen> {
                       );
 
                     String linhasStr = snapshot.data.value['linhas'];
-//                    print('linhasStr: ${linhasStr}');
-
                     List<String> linhasArr = linhasStr.split(' ');
-//                    print('linhasArr: ${linhasArr}');
-
                     List _list = List<Line>();
-
                     for (var l in linhasArr) {
                       if (l.trim().isNotEmpty) {
-                        print('l: $l');
                         _list.add(Line(l.trim()));
                       }
                     }
-
-//                    linhasArr.map((l) {
-//                      print('l: $l');
-//                      if(l.trim().isNotEmpty) {
-//                          _list.add(Line(l.trim()));
-//                      }
-//                    });
-//                    _list.sort((a, b) =>
-//                        a.code.toLowerCase().compareTo(b.code.toLowerCase()));
-//                    print('_list: ${_list}');
                     return _returnListResults(context, _list);
-//                    return
                 }
               },
             )
@@ -156,9 +140,7 @@ class _StopScreenState extends State<StopScreen> {
                 );
               },
             ),
-            onTap: () {
-//              close(context, list[index].code);
-            },
+            onTap: () {},
           );
         });
   }
