@@ -11,6 +11,8 @@ class Line {
     destiny = json["Retorno"];
   }
 
+  Line(this.code);
+
   bool circular;
   String code;
   String nickname;

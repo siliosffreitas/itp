@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:itp/models/line.dart';
 import 'package:itp/models/stop.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:itp/screens/times_screen.dart';
 
 class StopScreen extends StatefulWidget {
   final Stop _stop;
@@ -56,11 +58,17 @@ class _StopScreenState extends State<StopScreen> {
                 style: TextStyle(fontSize: 20),
               ),
             ),
-
-
+            Divider(
+              height: 1,
+            ),
             FutureBuilder(
-              future: FirebaseDatabase.instance.reference().child('linhasDaParada').child("${_stop.code}").once(),
-              builder: (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
+              future: FirebaseDatabase.instance
+                  .reference()
+                  .child('linhasDaParada')
+                  .child("${_stop.code}")
+                  .once(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                   case ConnectionState.none:
@@ -79,34 +87,80 @@ class _StopScreenState extends State<StopScreen> {
                         child: Text(
                             "Parece que algo deu errado, tente novamente mais tarde"),
                       );
-                      if(snapshot.data.value == null)
-                        return Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(16),
-                          child: Text(
+                    if (snapshot.data.value == null)
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          "A STRANS não associou nenhuma linha a esta parada.",
+                          textAlign: TextAlign.center,
+                        ),
+                      );
 
-                              "A STRANS não associou nenhuma linha a esta parada.", textAlign: TextAlign.center,),
-                        );
+                    String linhasStr = snapshot.data.value['linhas'];
+//                    print('linhasStr: ${linhasStr}');
 
-                    print(snapshot.data.value['linhas']);
-                    return Container();
+                    List<String> linhasArr = linhasStr.split(' ');
+//                    print('linhasArr: ${linhasArr}');
 
-//                    _list = List<Line>();
-//                    for (var json in snapshot.data.value) {
-//                      Line line = Line.fromMap(json);
-//                      _list.add(line);
-//                    }
+                    List _list = List<Line>();
+
+                    for (var l in linhasArr) {
+                      if (l.trim().isNotEmpty) {
+                        print('l: $l');
+                        _list.add(Line(l.trim()));
+                      }
+                    }
+
+//                    linhasArr.map((l) {
+//                      print('l: $l');
+//                      if(l.trim().isNotEmpty) {
+//                          _list.add(Line(l.trim()));
+//                      }
+//                    });
 //                    _list.sort((a, b) =>
 //                        a.code.toLowerCase().compareTo(b.code.toLowerCase()));
-//                    return _returnListResults(context, _list);
+//                    print('_list: ${_list}');
+                    return _returnListResults(context, _list);
+//                    return
                 }
               },
             )
-
-
-
           ],
         )));
+  }
+
+  ListView _returnListResults(BuildContext context, List<Line> list) {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: list.length,
+        itemBuilder: (BuildContext ctxt, int index) {
+          return ListTile(
+            leading: Icon(Icons.directions_bus),
+            title: Text(
+              list[index].code,
+              style: TextStyle(fontSize: 20),
+            ),
+//            subtitle: Text(
+//              list[index].nickname ?? "Não informado",
+//              style: TextStyle(fontSize: 12),
+//            ),
+            trailing: IconButton(
+              tooltip: "Horários de ${list[index].code}",
+              icon: Icon(Icons.access_time),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TimesScreen(list[index])),
+                );
+              },
+            ),
+            onTap: () {
+//              close(context, list[index].code);
+            },
+          );
+        });
   }
 
   String _titleInfowindow(Stop stop) {
