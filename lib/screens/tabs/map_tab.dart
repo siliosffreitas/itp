@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:itp/models/line.dart';
 import 'package:itp/models/stop.dart';
 import 'package:itp/screens/stop_screen.dart';
 import 'package:itp/util/constants.dart';
@@ -15,6 +16,7 @@ class MapTab extends StatefulWidget {
 class _MapTabState extends State<MapTab> {
   GoogleMapController _mapController;
   List<Stop> _nextsStops;
+  List<Line> _linesTrack;
 
   void _refresh() async {
     final center = await _getUserLocation();

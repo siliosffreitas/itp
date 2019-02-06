@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itp/models/stop.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class StopScreen extends StatefulWidget {
   final Stop _stop;
@@ -54,7 +55,56 @@ class _StopScreenState extends State<StopScreen> {
                 _stop.address,
                 style: TextStyle(fontSize: 20),
               ),
+            ),
+
+
+            FutureBuilder(
+              future: FirebaseDatabase.instance.reference().child('linhasDaParada').child("${_stop.code}").once(),
+              builder: (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                        strokeWidth: 5,
+                      ),
+                    );
+                  default:
+                    if (snapshot.hasError)
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                            "Parece que algo deu errado, tente novamente mais tarde"),
+                      );
+                      if(snapshot.data.value == null)
+                        return Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(16),
+                          child: Text(
+
+                              "A STRANS não associou nenhuma linha a esta parada.", textAlign: TextAlign.center,),
+                        );
+
+                    print(snapshot.data.value['linhas']);
+                    return Container();
+
+//                    _list = List<Line>();
+//                    for (var json in snapshot.data.value) {
+//                      Line line = Line.fromMap(json);
+//                      _list.add(line);
+//                    }
+//                    _list.sort((a, b) =>
+//                        a.code.toLowerCase().compareTo(b.code.toLowerCase()));
+//                    return _returnListResults(context, _list);
+                }
+              },
             )
+
+
+
           ],
         )));
   }
