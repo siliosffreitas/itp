@@ -98,14 +98,13 @@ class _StopScreenState extends State<StopScreen> {
                         ),
                       );
 
-                    String linhasStr = snapshot.data.value['linhas'];
-                    List<String> linhasArr = linhasStr.split(' ');
                     List _list = List<Line>();
-                    for (var l in linhasArr) {
-                      if (l.trim().isNotEmpty) {
-                        _list.add(Line(l.trim()));
-                      }
+                    for (var json in snapshot.data.value) {
+                      Line line = Line.fromMap(json);
+                      _list.add(line);
                     }
+                    _list.sort((a, b) =>
+                        a.code.toLowerCase().compareTo(b.code.toLowerCase()));
                     return _returnListResults(context, _list);
                 }
               },
@@ -125,10 +124,10 @@ class _StopScreenState extends State<StopScreen> {
               list[index].code,
               style: TextStyle(fontSize: 20),
             ),
-//            subtitle: Text(
-//              list[index].nickname ?? "Não informado",
-//              style: TextStyle(fontSize: 12),
-//            ),
+            subtitle: Text(
+              list[index].nickname ?? "Não informado",
+              style: TextStyle(fontSize: 12),
+            ),
             trailing: IconButton(
               tooltip: "Horários de ${list[index].code}",
               icon: Icon(Icons.access_time),
