@@ -4,6 +4,7 @@ import 'package:itp/models/stop.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:itp/screens/times_screen.dart';
+import 'dart:io' show Platform;
 
 class StopScreen extends StatefulWidget {
   final Stop _stop;
@@ -26,6 +27,9 @@ class _StopScreenState extends State<StopScreen> {
         appBar: AppBar(
             title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: Platform.isAndroid
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.center,
           children: <Widget>[
             Text("Parada ${_stop.code}"),
             Text(
