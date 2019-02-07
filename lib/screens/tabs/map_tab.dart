@@ -68,22 +68,10 @@ class _MapTabState extends State<MapTab> {
   }
 
   _determineLineColor() {
-    List<Color> colors = [
-      Colors.blueAccent,
-      Colors.redAccent,
-      Colors.greenAccent,
-      Colors.yellowAccent,
-      Colors.orangeAccent,
-      Colors.green,
-      Colors.brown,
-      Colors.purpleAccent,
-      Colors.lightBlueAccent,
-      Colors.grey
-    ];
     if (_linesTrack == null) {
-      return colors[0];
+      return COLORS_LINE_TRACKING[0];
     }
-    for (var color in colors) {
+    for (var color in COLORS_LINE_TRACKING) {
       bool founded = false;
       for (var line in _linesTrack) {
         if (line.color != null && color == line.color) {
