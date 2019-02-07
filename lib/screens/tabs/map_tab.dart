@@ -232,8 +232,35 @@ class _MapTabState extends State<MapTab> {
                                 width: 250,
                                 child: Card(
                                   child: ListTile(
-                                    leading: Icon(Icons.directions_bus,
-                                        color: _linesTrack[index].color),
+                                    leading: Stack(
+                                      alignment: const Alignment(1, -1),
+                                      children: <Widget>[
+                                        Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Icon(Icons.directions_bus,
+                                              color: _linesTrack[index].color),
+                                        ),
+                                        Container(
+                                          width: 15,
+                                          height: 15,
+                                          margin: EdgeInsets.only(left: 0),
+                                          child: RaisedButton(
+                                            color: Colors.redAccent,
+                                            padding: EdgeInsets.zero,
+                                            onPressed: () {},
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(7.5)),
+                                            child: Text(
+                                              "4",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 8),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                     title: Text(
                                       _linesTrack[index].code,
                                     ),
@@ -261,8 +288,6 @@ class _MapTabState extends State<MapTab> {
       ],
     ));
   }
-
-//  determineColor
 
   void _onMapCreated(GoogleMapController controller) async {
     setState(() {
