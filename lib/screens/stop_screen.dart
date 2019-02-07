@@ -143,7 +143,9 @@ class _StopScreenState extends State<StopScreen> {
                 );
               },
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context, list[index]);
+            },
           );
         });
   }

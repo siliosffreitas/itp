@@ -31,6 +31,27 @@ class _MapTabState extends State<MapTab> {
     _getStops(center);
   }
 
+  addLineTrack(Line line) {
+    if (_linesTrack == null || _linesTrack.isEmpty) {
+      _linesTrack = List<Line>();
+    }
+
+    // procurando linha na lista de linhas, só com o contains nao detectou
+    bool founded = false;
+    for (var l in _linesTrack) {
+      if (l.code == line.code) {
+        founded = true;
+        break;
+      }
+    }
+    if (!founded) {
+      _linesTrack.add(line);
+      print("Linha ${line.code} adicionada ao rastreamento ");
+    } else {
+      print("Linha ${line.code} já está no rastreamento");
+    }
+  }
+
   _getStops(LatLng userLocation) {
     if (userLocation == null) {
       _showDialog("Erro", "Algum problema ao tentar capturar sua posição");
@@ -123,15 +144,35 @@ class _MapTabState extends State<MapTab> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: GoogleMap(
-        onMapCreated: _onMapCreated,
-        myLocationEnabled: true,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(-5.082618, -42.790596),
-          zoom: 11,
+        child: Stack(
+      alignment: const Alignment(0, 1),
+      children: <Widget>[
+        GoogleMap(
+          onMapCreated: _onMapCreated,
+          myLocationEnabled: true,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(-5.082618, -42.790596),
+            zoom: 11,
+          ),
         ),
-      ),
-    );
+        _linesTrack != null && _linesTrack.isNotEmpty
+            ? Container(
+                height: 71,
+                child: Column(
+                  children: <Widget>[
+                    Divider(
+                      height: 1,
+                    ),
+                    Container(
+                      height: 70,
+                      color: Color.fromARGB(200, 255, 255, 255),
+                    )
+                  ],
+                ),
+              )
+            : Container()
+      ],
+    ));
   }
 
   void _onMapCreated(GoogleMapController controller) async {
@@ -139,11 +180,12 @@ class _MapTabState extends State<MapTab> {
       _mapController = controller;
     });
 
-    _mapController.onInfoWindowTapped.add((Marker marker) {
+    _mapController.onInfoWindowTapped.add((Marker marker) async {
       for (var stop in _nextsStops) {
         if (marker.options.infoWindowText.title == _titleInfowindow(stop)) {
-          Navigator.of(context).push(MaterialPageRoute(
+          Line line = await Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => StopScreen(stop)));
+          addLineTrack(line);
           break;
         }
       }
