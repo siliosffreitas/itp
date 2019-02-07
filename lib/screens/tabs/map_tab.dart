@@ -32,7 +32,6 @@ class _MapTabState extends State<MapTab> {
   }
 
   addLineTrack(Line line) {
-
     if (_linesTrack == null || _linesTrack.isEmpty) {
       _linesTrack = List<Line>();
     }
@@ -46,10 +45,15 @@ class _MapTabState extends State<MapTab> {
       }
     }
     if (!founded) {
-
-      if(_linesTrack != null && _linesTrack.length == MAX_LINES_IN_TRACKING){
-        _showDialog("Atenção", "O máximo de linhas rastreadas simultaneamente é ${MAX_LINES_IN_TRACKING}");
+      if (_linesTrack.length == MAX_LINES_IN_TRACKING) {
+        _showDialog("Atenção",
+            "O máximo de linhas rastreadas simultaneamente é ${MAX_LINES_IN_TRACKING}");
         return;
+      }
+
+      if (_linesTrack.length >= MAX_LINES_IN_TRACKING / 2) {
+        _showDialog("Atenção",
+            "Muitas linhas sendo rastreadas simultaneamente pode causar lentidão e consumo excessivo de dados");
       }
 
       setState(() {
@@ -62,7 +66,7 @@ class _MapTabState extends State<MapTab> {
     }
   }
 
-  removeLineTrack(Line line){
+  removeLineTrack(Line line) {
     for (var l in _linesTrack) {
       if (l.code == line.code) {
         setState(() {
@@ -188,49 +192,41 @@ class _MapTabState extends State<MapTab> {
                     Container(
                       height: 70,
                       color: Color.fromARGB(200, 255, 255, 255),
-                      child:
-
-                          ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                              itemCount: _linesTrack.length,
-                              itemBuilder: (BuildContext ctxt, int index) {
-                                return Container(
-                                  width: 250,
-
-                                  child: Card(
-
-                                    child: ListTile(
-                                      leading: Icon(Icons.directions_bus),
-                                      title: Text(
-                                        _linesTrack[index].code,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _linesTrack.length,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            return Container(
+                                width: 250,
+                                child: Card(
+                                  child: ListTile(
+                                    leading: Icon(Icons.directions_bus),
+                                    title: Text(
+                                      _linesTrack[index].code,
 //                                      style: TextStyle(fontSize: 20),
-                                      ),
+                                    ),
                                     subtitle: Text(
                                       _linesTrack[index].nickname ??
                                           "Não informado",
 //                                      style: TextStyle(fontSize: 12),
                                       maxLines: 1,
-
-
                                     ),
-                                      trailing: IconButton(
-                                        tooltip:
-                                        "Horários de ${_linesTrack[index].code}",
-                                        icon: Icon(Icons.close),
-                                        onPressed: () {
-
-                                          removeLineTrack(_linesTrack[index]);
+                                    trailing: IconButton(
+                                      tooltip:
+                                          "Horários de ${_linesTrack[index].code}",
+                                      icon: Icon(Icons.close),
+                                      onPressed: () {
+                                        removeLineTrack(_linesTrack[index]);
 //                                  Navigator.push(
 //                                    context,
 //                                    MaterialPageRoute(
 //                                        builder: (context) => TimesScreen(list[index])),
 //                                  );
-                                        },
-                                      ),
+                                      },
                                     ),
-                                  )
-                                );
-                              }),
+                                  ),
+                                ));
+                          }),
                     )
                   ],
                 ),
