@@ -246,7 +246,9 @@ class _MapTabState extends State<MapTab> {
         if (marker.options.infoWindowText.title == _titleInfowindow(stop)) {
           Line line = await Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => StopScreen(stop)));
-          addLineTrack(line);
+          if (line != null) {
+            addLineTrack(line);
+          }
           break;
         }
       }
