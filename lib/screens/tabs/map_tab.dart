@@ -57,6 +57,7 @@ class _MapTabState extends State<MapTab> {
       }
 
       setState(() {
+        line.color = _determineLineColor();
         _linesTrack.add(line);
       });
 
@@ -66,10 +67,41 @@ class _MapTabState extends State<MapTab> {
     }
   }
 
+  _determineLineColor() {
+    List<Color> colors = [
+      Colors.blueAccent,
+      Colors.redAccent,
+      Colors.greenAccent,
+      Colors.yellowAccent,
+      Colors.orangeAccent,
+      Colors.green,
+      Colors.brown,
+      Colors.purpleAccent,
+      Colors.lightBlueAccent,
+      Colors.grey
+    ];
+    if (_linesTrack == null) {
+      return colors[0];
+    }
+    for (var color in colors) {
+      bool founded = false;
+      for (var line in _linesTrack) {
+        if (line.color != null && color == line.color) {
+          founded = true;
+          break;
+        }
+      }
+      if (!founded) {
+        return color;
+      }
+    }
+  }
+
   removeLineTrack(Line line) {
     for (var l in _linesTrack) {
       if (l.code == line.code) {
         setState(() {
+          line.color = null;
           _linesTrack.remove(l);
         });
 
@@ -200,15 +232,14 @@ class _MapTabState extends State<MapTab> {
                                 width: 250,
                                 child: Card(
                                   child: ListTile(
-                                    leading: Icon(Icons.directions_bus),
+                                    leading: Icon(Icons.directions_bus,
+                                        color: _linesTrack[index].color),
                                     title: Text(
                                       _linesTrack[index].code,
-//                                      style: TextStyle(fontSize: 20),
                                     ),
                                     subtitle: Text(
                                       _linesTrack[index].nickname ??
                                           "Não informado",
-//                                      style: TextStyle(fontSize: 12),
                                       maxLines: 1,
                                     ),
                                     trailing: IconButton(
@@ -217,11 +248,6 @@ class _MapTabState extends State<MapTab> {
                                       icon: Icon(Icons.close),
                                       onPressed: () {
                                         removeLineTrack(_linesTrack[index]);
-//                                  Navigator.push(
-//                                    context,
-//                                    MaterialPageRoute(
-//                                        builder: (context) => TimesScreen(list[index])),
-//                                  );
                                       },
                                     ),
                                   ),
@@ -235,6 +261,8 @@ class _MapTabState extends State<MapTab> {
       ],
     ));
   }
+
+//  determineColor
 
   void _onMapCreated(GoogleMapController controller) async {
     setState(() {

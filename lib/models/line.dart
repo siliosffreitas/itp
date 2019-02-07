@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 /**
  * Representacao de uma parada
  * @author Silio Silvestre
@@ -18,6 +20,7 @@ class Line {
   String nickname;
   String origin;
   String destiny;
+  Color color;
 
   @override
   String toString() {
