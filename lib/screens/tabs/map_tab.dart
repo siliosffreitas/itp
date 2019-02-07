@@ -32,6 +32,7 @@ class _MapTabState extends State<MapTab> {
   }
 
   addLineTrack(Line line) {
+
     if (_linesTrack == null || _linesTrack.isEmpty) {
       _linesTrack = List<Line>();
     }
@@ -45,6 +46,12 @@ class _MapTabState extends State<MapTab> {
       }
     }
     if (!founded) {
+
+      if(_linesTrack != null && _linesTrack.length == MAX_LINES_IN_TRACKING){
+        _showDialog("Atenção", "O máximo de linhas rastreadas simultaneamente é ${MAX_LINES_IN_TRACKING}");
+        return;
+      }
+
       setState(() {
         _linesTrack.add(line);
       });
