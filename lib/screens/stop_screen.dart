@@ -24,97 +24,123 @@ class _StopScreenState extends State<StopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: Platform.isAndroid
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.center,
-          children: <Widget>[
-            Text("Parada ${_stop.code}"),
-            Text(
-              _stop.nickname,
-              style: TextStyle(fontSize: 12),
-            ),
-          ],
-        )),
-        body: SingleChildScrollView(
-            child: Column(
-          children: <Widget>[
-            Container(
-              height: 300,
-              child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target:
-                      LatLng(this._stop.longititude, this._stop.longititude),
-                  zoom: 11,
-                ),
-              ),
-            ),
-            Divider(
-              height: 1,
-            ),
-            Container(
-              margin: EdgeInsets.all(16),
-              child: Text(
-                _stop.address,
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            Divider(
-              height: 1,
-            ),
-            FutureBuilder(
-              future: FirebaseDatabase.instance
-                  .reference()
-                  .child('linhasDaParada')
-                  .child("${_stop.code}")
-                  .once(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                    return Container(
-                      padding: EdgeInsets.all(16),
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                        strokeWidth: 5,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 300.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Parada ${_stop.code}",
                       ),
-                    );
-                  default:
-                    if (snapshot.hasError)
-                      return Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                            "Parece que algo deu errado, tente novamente mais tarde"),
-                      );
-                    if (snapshot.data.value == null)
-                      return Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                          "A STRANS não associou nenhuma linha a esta parada.",
-                          textAlign: TextAlign.center,
+                      Text(
+                        _stop.nickname,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[70]),
+                      ),
+                    ],
+                  ),
+                  background: Stack(
+                    children: <Widget>[
+                      GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                              this._stop.longititude, this._stop.longititude),
+                          zoom: 11,
                         ),
-                      );
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                              Color.fromARGB(125, 0, 0, 0),
+                              Color.fromARGB(0, 0, 0, 0)
+                            ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter)),
+                        height: 80,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [
+                                Color.fromARGB(125, 0, 0, 0),
+                                Color.fromARGB(0, 0, 0, 0)
+                              ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter)),
+                          height: 80,
+                        ),
+                      ),
+                    ],
+                  )),
+//              actions: <Widget>[
+//                IconButton(
+//                  icon: Icon(Icons.map),
+//                )
+//              ],
+            ),
+          ];
+        },
+        body: FutureBuilder(
+          future: FirebaseDatabase.instance
+              .reference()
+              .child('linhasDaParada')
+              .child("${_stop.code}")
+              .once(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+              case ConnectionState.none:
+                return Container(
+                  padding: EdgeInsets.all(16),
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    strokeWidth: 5,
+                  ),
+                );
+              default:
+                if (snapshot.hasError)
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                        "Parece que algo deu errado, tente novamente mais tarde"),
+                  );
+                if (snapshot.data.value == null)
+                  return Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      "A STRANS não associou nenhuma linha a esta parada.",
+                      textAlign: TextAlign.center,
+                    ),
+                  );
 
-                    List _list = List<Line>();
-                    for (var json in snapshot.data.value) {
-                      Line line = Line.fromMap(json);
-                      _list.add(line);
-                    }
-                    _list.sort((a, b) =>
-                        a.code.toLowerCase().compareTo(b.code.toLowerCase()));
-                    return _returnListResults(context, _list);
+                List _list = List<Line>();
+                for (var json in snapshot.data.value) {
+                  Line line = Line.fromMap(json);
+                  _list.add(line);
                 }
-              },
-            )
-          ],
-        )));
+                _list.sort((a, b) =>
+                    a.code.toLowerCase().compareTo(b.code.toLowerCase()));
+                return _returnListResults(context, _list);
+            }
+          },
+        ),
+      ),
+    );
   }
 
   ListView _returnListResults(BuildContext context, List<Line> list) {
